@@ -5,9 +5,11 @@ let audioSrc1 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp
 let audioSrc2 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3'
 // مدة الفايل
 const duration = 26;
+const overallSentiment = 'positive' || 'negative' || 'neutral';
 const copyText = 'hello'
 const evaluationReportPath = "https://drive.google.com/file/d/1EDd_xQpaK2CIY2og45v8UY-SZgwQuFcy/view?usp=drive_link"
 const reportName = 'Evaluation Report'
+const typeOfCall = 'inbound' || 'Outgoing'
 
 const agentSlots = [
     { start: 0, analysis: 'positive' },
@@ -26,9 +28,36 @@ const customerSlots = [
 // -- end of backend variables --
 
 // colors
-const waveColor = 'rgb(142, 202, 230)'
+const waveColor = '#dec9e9'
 const progressColor = '#000'
 const cursorColor = '#000'
+
+const typeOfCallSpan = document.querySelector('#type-of-call')
+
+if (typeOfCall === 'inbound') {
+    typeOfCallSpan.innerHTML = `<i class="fa-solid fa-up-right-from-square"></i> Inbound Call`
+    typeOfCallSpan.classList.add('inbound')
+} else {
+    typeOfCallSpan.innerHTML = `<i class="fa-solid fa-up-right-from-square"></i> Outgoing Call`
+    typeOfCallSpan.classList.add('outgoing')
+}
+
+const scoreSpan = document.querySelector('#score')
+const positiveSentimentSpan = document.querySelector('.sentiment-emoji-positive')
+const negativeSentimentSpan = document.querySelector('.sentiment-emoji-negative')
+const neutralSentimentSpan = document.querySelector('.sentiment-emoji-neutral')
+
+
+if (overallSentiment === 'positive') {
+    scoreSpan.classList.add('positive')
+    positiveSentimentSpan.style.color = 'var(--emoji-green)'
+} else if (overallSentiment === 'negative') {
+    scoreSpan.classList.add('negative')
+    negativeSentimentSpan.style.color = 'var(--emoji-red)'
+} else {
+    scoreSpan.classList.add('neutral')
+    neutralSentimentSpan.style.color = 'var(--emoji-yellow)'
+}
 
 var audioTag = new Audio();
 audioTag.src = audioSrc1 || audioSrc2;
@@ -101,7 +130,6 @@ wavesurfer2.on('interaction', (newTime) => {
 document.querySelector(".audio-player").appendChild(audioTag);
 
 function slotsLoop(slots, idx) {
-
     slots.map((slot) => {
         const leftCalc = (slot.start / duration) * 100
         if (slot.analysis === 'positive' || slot.analysis === 'negative') {
@@ -115,7 +143,7 @@ function slotsLoop(slots, idx) {
                 emoji.classList.add('positive')
             }
             else if (slot.analysis === 'negative') {
-                emoji.innerHTML = `<i class="fa-solid fa-face-frown-open"></i>`
+                emoji.innerHTML = `<i class="fa-solid fa-face-frown"></i>`
                 emoji.classList.add('negative')
             }
             emoji.addEventListener('click', () => {
@@ -160,25 +188,18 @@ copyButton.addEventListener('click', copy(copyText));
 const downloadButton = document.querySelector('#download-button')
 
 function downloadFile(path, filename) {
-    fetch(path)
-        .then(res => res.json())
-        .then(json => {
-            // Convert JSON to string
-            const data = JSON.stringify(json);
+    const anchor = document.createElement('a');
+    anchor.href = path;
+    anchor.download = filename;
 
-            // Create a Blob object
-            const blob = new Blob([data], { type: 'application/json' });
+    // Append to the DOM
+    document.body.appendChild(anchor);
 
-            // Create an object URL
-            const url = URL.createObjectURL(blob);
+    // Trigger `click` event
+    // anchor.click();
 
-            // Download file
-            download(url, filename);
-
-            // Release the object URL
-            URL.revokeObjectURL(url);
-        })
-        .catch(err => console.error(err));
+    // Remove element from DOM
+    document.body.removeChild(anchor);
 }
 
 downloadButton.addEventListener('click', downloadFile(evaluationReportPath, reportName))

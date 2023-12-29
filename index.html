@@ -11,20 +11,47 @@
       integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer" />
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet" />
     <!-- css files -->
     <link rel="stylesheet" href="normalize.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <nav class="navbar"></nav>
+    <nav class="navbar" id="navbar">
+      <img
+        class="logo-img"
+        src="https://plus.unsplash.com/premium_photo-1680700308578-b40c7418e997?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YWl8ZW58MHwwfDB8fHww"
+        alt="Logo" />
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+      </ul>
+    </nav>
     <main class="main">
-      <aside class="sidebar"></aside>
-      <article class="main-content flex">
+      <aside class="sidebar">
+        <h5>
+          <a href="#">
+            <img
+              class="logo-img"
+              src="https://plus.unsplash.com/premium_photo-1680700308578-b40c7418e997?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YWl8ZW58MHwwfDB8fHww"
+              alt="Logo" />
+            Interaction Analytics
+          </a>
+        </h5>
+        <ul>
+          <a href="#" class="active">About</a>
+          <a href="#">Services</a>
+        </ul>
+      </aside>
+      <article class="main-content">
         <div class="main-col">
           <section class="call-info">
-            <span id="type-of-call"
-              ><i class="fa-solid fa-phone"></i> Inbound Call</span
-            >
+            <span id="type-of-call"></span>
             <span id="call-id">Lorem, ipsum dolor sit amet</span>
             <span id="copy-button"><i class="fa-regular fa-copy"></i></span>
             <h2>Julia Wolff's Activity</h2>
@@ -34,19 +61,19 @@
             <div id="waveform"></div>
             <div class="analysis-emojis"></div>
           </section>
-          <section class="analysis"></section>
-          <details>
+          <details class="summary-details">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid
             labore, consectetur culpa autem dignissimos veritatis optio veniam
             sequi voluptas error quos obcaecati expedita fugit ducimus aliquam
             modi adipisci rerum accusantium!
             <summary>
-              <i class="fa-solid fa-file-zipper"></i> Call Summary
+              <!-- <i class="fa-solid fa-file-zipper"></i> -->
+              Call Summary
             </summary>
           </details>
           <section class="call-activity">
-            <h4 class="header">Call Activity</h4>
-            <div class="flex">
+            <h3 class="main-header">Call Activity</h3>
+            <div class="row">
               <div class="col">
                 <p>
                   <span class="category-title">Direction: </span
@@ -98,10 +125,10 @@
             </div>
           </section>
           <section class="evaluation">
-            <h4 class="header">Evaluation</h4>
-            <div class="flex">
+            <h3 class="main-header">Evaluation</h3>
+            <div class="">
               <div class="col">
-                <h5>Policy Knowledge <span>22/50 50%</span></h5>
+                <h4>Policy Knowledge <span id="score">22/50 50%</span></h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex
                   quasi voluptate libero numquam
@@ -111,15 +138,92 @@
                 <!-- <a
                   href="https://drive.google.com/file/d/1EDd_xQpaK2CIY2og45v8UY-SZgwQuFcy/view?usp=drive_link"
                   download="Evaluation Report"> -->
-                <button id="download-button">
+                <!-- <button id="download-button">
                   <i class="fa-solid fa-download"></i> Download
-                </button>
+                </button> -->
                 <!-- </a> -->
+              </div>
+            </div>
+            <section class="evaluation-details">
+              <div class="details-section">
+                <h5>
+                  Section 1 - Introduction <span class="pts">22/50 pts</span>
+                </h5>
+                <p>1 - The agent identified themselves to the customer</p>
+                <h6>No <span class="pts">2 pts</span></h6>
+                <p>1 - The agent identified themselves to the customer</p>
+                <h6>No <span class="pts">2 pts</span></h6>
+                <p>1 - The agent identified themselves to the customer</p>
+                <h6>No <span class="pts">2 pts</span></h6>
+              </div>
+            </section>
+          </section>
+        </div>
+        <div class="main-col">
+          <h3 class="main-header">Transcription</h3>
+          <div class="overall">
+            <h4>Overall Sentiment</h4>
+            <div class="sentiment-emojis">
+              <span class="sentiment-emoji sentiment-emoji-positive"
+                ><i class="fa-regular fa-face-smile"></i
+              ></span>
+              <span class="sentiment-emoji sentiment-emoji-neutral"
+                ><i class="fa-regular fa-face-meh"></i
+              ></span>
+              <span class="sentiment-emoji sentiment-emoji-negative"
+                ><i class="fa-regular fa-face-frown"></i
+              ></span>
+            </div>
+          </div>
+          <div class="search-transcription">
+            <input type="text" placeholder="Search Transcription" />
+            <button class="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+          <section class="transcription-section">
+            <div class="agent-transcription">
+              <div>
+                <p class="info">Agent 20:23</p>
+                <p></p>
+              </div>
+              <div class="message-section">
+                <!-- positive message -->
+                <div class="message positive">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et,
+                  optio! Natus tempora incidunt, sequi quod aliquid ipsam amet
+                  iusto recusandae quae possimus consectetur ratione beatae in
+                  sit numquam explicabo iste.
+                </div>
+                <div class="image">
+                  <img
+                    src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyc29ufGVufDB8MHwwfHx8MA%3D%3D"
+                    alt="Agent profile" />
+                </div>
+              </div>
+            </div>
+            <div class="customer-transcription">
+              <div>
+                <p class="info">Julia Wolff 20:23</p>
+                <p></p>
+              </div>
+              <div class="message-section">
+                <div class="image">
+                  <img
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="Julia Wolff profile" />
+                </div>
+                <!-- negative message -->
+                <div class="message negative">
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi
+                  dignissimos repellat velit praesentium accusantium
+                  reprehenderit consectetur illo doloribus maxime, ipsa aut amet
+                  culpa ea, assumenda porro deleniti neque fugit magni?
+                </div>
               </div>
             </div>
           </section>
         </div>
-        <div class="main-col"></div>
       </article>
     </main>
   </body>
