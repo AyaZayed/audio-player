@@ -5,11 +5,11 @@ let audioSrc1 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp
 let audioSrc2 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3'
 // مدة الفايل
 const duration = 26;
-const overallSentiment = 'positive' || 'negative' || 'neutral';
+const overallSentiment = 'neutral' || 'positive' || 'negative';
 const copyText = 'hello'
 const evaluationReportPath = "https://drive.google.com/file/d/1EDd_xQpaK2CIY2og45v8UY-SZgwQuFcy/view?usp=drive_link"
 const reportName = 'Evaluation Report'
-const typeOfCall = 'inbound' || 'Outgoing'
+const typeOfCall = 'outgoing' || 'inbound'
 
 const agentSlots = [
     { start: 0, analysis: 'positive' },
@@ -131,7 +131,7 @@ document.querySelector(".audio-player").appendChild(audioTag);
 
 function slotsLoop(slots, idx) {
     slots.map((slot) => {
-        const leftCalc = (slot.start / duration) * 100
+        const leftCalc = (slot.start / duration) * 100;
         if (slot.analysis === 'positive' || slot.analysis === 'negative') {
             const timelines = document.getElementsByClassName('timeline')
             const timeline = timelines[idx]
@@ -202,4 +202,47 @@ function downloadFile(path, filename) {
     document.body.removeChild(anchor);
 }
 
-downloadButton.addEventListener('click', downloadFile(evaluationReportPath, reportName))
+// downloadButton.addEventListener('click', downloadFile(evaluationReportPath, reportName))
+
+const sidebar = document.querySelector('.sidebar')
+let isSidebarOpen = true;
+const closeIcon = document.querySelector('#closeSidebar')
+const openIcon = document.querySelector('#openSidebar')
+const sidebarLinks = document.querySelectorAll('.sidebarLink')
+closeIcon.addEventListener('click',
+    () => {
+        sidebar.style.width = '0px';
+        openIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+        sidebarLinks.forEach(link => {
+            link.style.display = 'none'
+        });
+        isSidebarOpen = false;
+    }
+)
+openIcon.addEventListener('click',
+    () => {
+        sidebar.style.width = 'var(--sidebar-width)';
+        openIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+        sidebarLinks.forEach(link => {
+            link.style.display = 'block'
+        });
+        isSidebarOpen = true;
+    }
+)
+
+const barsIcon = document.querySelector('.bars-icon')
+const navList = document.querySelector('#navList')
+let isNavbarOpen = false
+
+barsIcon.addEventListener('click', () => {
+    if (isNavbarOpen) {
+        navList.style.display = 'none'
+        isNavbarOpen = false;
+    }
+    else {
+        navList.style.display = 'flex'
+        isNavbarOpen = true;
+    }
+})
