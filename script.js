@@ -1,28 +1,93 @@
-//  -- backend variables --
+const sidebar = document.querySelector('.sidebar')
+let isSidebarOpen = true;
+const closeIcon = document.querySelector('#closeSidebar')
+const openIcon = document.querySelector('#openSidebar')
+const sidebarContent = document.querySelector('.sidebar-content')
+closeIcon.addEventListener('click',
+    () => {
+        sidebar.style.width = '0px';
+        openIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+        sidebarContent.style.display = 'none'
+        isSidebarOpen = false;
+    }
+)
+openIcon.addEventListener('click',
+    () => {
+        sidebar.style.width = 'var(--sidebar-width)';
+        openIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+        sidebarContent.style.display = 'block'
+        isSidebarOpen = true;
+    }
+)
+
+const barsIcon = document.querySelector('.bars-icon')
+const navList = document.querySelector('#navList')
+let isNavbarOpen = false
+
+barsIcon.addEventListener('click', () => {
+    if (isNavbarOpen) {
+        navList.style.display = 'none'
+        isNavbarOpen = false;
+    }
+    else {
+        navList.style.display = 'flex'
+        isNavbarOpen = true;
+    }
+})
+
+// Get the button:
+let mybutton = document.querySelector(".scroll-to-top");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function () { scrollFunction() };
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
 // فايل الموظف
-let audioSrc1 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3'
+let audioSrc1 = 'https://65fd-197-57-185-231.ngrok-free.app/media/telecom_recharge_issue.mp3'
 // فايل العميل
-let audioSrc2 = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3'
+let audioSrc2 = 'https://65fd-197-57-185-231.ngrok-free.app/media/telecom_recharge_issue.wav'
+
+let audioFull = 'https://65fd-197-57-185-231.ngrok-free.app/media/telecom_recharge_issue.mp3'
 // مدة الفايل
-const duration = 26;
+const duration = 150;
+
 const overallSentiment = 'neutral' || 'positive' || 'negative';
+// call id
 const copyText = 'hello'
-const evaluationReportPath = "https://drive.google.com/file/d/1EDd_xQpaK2CIY2og45v8UY-SZgwQuFcy/view?usp=drive_link"
+// the file to be downloaded
 const reportName = 'Evaluation Report'
+const reportExtension = 'csv'
+// نوع المكالمة
 const typeOfCall = 'outgoing' || 'inbound'
 
 const agentSlots = [
     { start: 0, analysis: 'positive' },
-    { start: 9, analysis: 'negative' },
-    { start: 17, analysis: 'neutral' },
-    { start: 23, analysis: 'negative' },
+    { start: 10, analysis: 'negative' },
+    { start: 20, analysis: 'neutral' },
+    { start: 130, analysis: 'positive' },
+    { start: 90, analysis: 'negative' },
 ]
-
 const customerSlots = [
-    { start: 1, analysis: 'positive' },
-    { start: 5, analysis: 'negative' },
-    { start: 13, analysis: 'neutral' },
-    { start: 20, analysis: 'positive' },
+    { start: 0, analysis: 'positive' },
+    { start: 7, analysis: 'negative' },
+    { start: 50, analysis: 'neutral' },
+    { start: 30, analysis: 'positive' },
+    { start: 140, analysis: 'negative' },
 ]
 
 // -- end of backend variables --
@@ -59,9 +124,17 @@ if (overallSentiment === 'positive') {
     neutralSentimentSpan.style.color = 'var(--emoji-yellow)'
 }
 
-var audioTag = new Audio();
-audioTag.src = audioSrc1 || audioSrc2;
-audioTag.controls = true
+const audio = new Audio()
+audio.controls = true
+audio.src = audioSrc1
+const ext = audio.src.lastIndexOf(".");
+const extension = audio.src.slice(ext, audio.src.length);
+console.log(extension);
+if (extension == '.mp3') {
+    audio.type = 'audio/mp3'
+} else {
+    audio.type = 'audio/wav'
+}
 
 // Create a WaveSurfer instance and pass the media element
 const wavesurfer1 = WaveSurfer.create({
@@ -76,65 +149,22 @@ const wavesurfer1 = WaveSurfer.create({
     barRadius: 2,
     cursorWidth: 2,
     cursorColor: cursorColor,
-    url: audioSrc1,
-    normalize: true
+    media: audio,
+    normalize: true,
+    splitChannels: true
 })
 
-const wavesurfer2 = WaveSurfer.create({
-    container: '#waveform',
-    waveColor: waveColor,
-    progressColor: progressColor,
-    height: 30,
-    barAlign: "top",
-    dragToSeek: true,
-    barWidth: 2,
-    barGap: 1,
-    barRadius: 2,
-    cursorWidth: 2,
-    cursorColor: cursorColor,
-    url: audioSrc2,
-    normalize: true
-})
-
-audioTag.addEventListener('play', function () {
-    wavesurfer1.play(); wavesurfer2.play()
-})
-
-audioTag.addEventListener('pause', function () {
-    wavesurfer1.pause(); wavesurfer2.pause()
-})
-
-audioTag.addEventListener('volumechange', function () {
-    if (this.muted) {
-        wavesurfer1.setMuted(true); wavesurfer2.setMuted(true)
-    }
-    wavesurfer1.setVolume(audioTag.volume); wavesurfer2.setVolume(audioTag.volume);
-})
-
-audioTag.addEventListener('timeupdate', function () {
-    wavesurfer1.setTime(audioTag.currentTime); wavesurfer2.setTime(audioTag.currentTime);
-})
-
-audioTag.addEventListener('ratechange', function () {
-    wavesurfer1.setPlaybackRate(audioTag.playbackRate); wavesurfer2.setPlaybackRate(audioTag.playbackRate);
-})
-
-wavesurfer1.on('interaction', (newTime) => {
-    audioTag.currentTime = newTime
-})
-
-wavesurfer2.on('interaction', (newTime) => {
-    audioTag.currentTime = newTime;
-})
-
-document.querySelector(".audio-player").appendChild(audioTag);
+document.querySelector(".audio-player").appendChild(audio);
 
 function slotsLoop(slots, idx) {
     slots.map((slot) => {
-        const leftCalc = (slot.start / duration) * 100;
         if (slot.analysis === 'positive' || slot.analysis === 'negative') {
             const timelines = document.getElementsByClassName('timeline')
             const timeline = timelines[idx]
+            const timelineWidth = timeline.offsetWidth;
+            const leftCalc = (slot.start / duration) * 100;
+            console.log('timeline width:' + timelineWidth + 'duration: ' + duration + 'slot.start: ' + slot.start, 'left: ' + leftCalc)
+            console.log(leftCalc)
             const emoji = document.createElement('span')
             emoji.classList.add('emoji')
             emoji.style.left = `${leftCalc}%`
@@ -147,7 +177,17 @@ function slotsLoop(slots, idx) {
                 emoji.classList.add('negative')
             }
             emoji.addEventListener('click', () => {
-                audioTag.currentTime = slot.start
+                wavesurfer1.setTime(slot.start)
+                audio.currentTime = slot.start
+            })
+            emoji.addEventListener('mouseenter', () => {
+                const slotSpan = document.createElement('span')
+                slotSpan.textContent = Math.round(slot.start)
+                slotSpan.classList.add('slot-span')
+                emoji.appendChild(slotSpan)
+            })
+            emoji.addEventListener('mouseleave', () => {
+                emoji.removeChild(emoji.lastChild)
             })
             timeline.appendChild(emoji)
         }
@@ -175,74 +215,81 @@ function slotsEmojis(agentSlots, customerSlots) {
 
 slotsEmojis(agentSlots, customerSlots)
 
-const copyButton = document.getElementById('copy-button');
+const copyButton = document.querySelector('#copy-button');
 
-const copy = async (text) => {
-    await navigator.clipboard.writeText(text);
+copyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(copyText);
     copyButton.classList.add('copied');
-    copyButton.innerHTML = `<i class="fa-solid fa-check"></i>`;
-}
+    copyButton.innerHTML = `<i class="fa-solid fa-check" style="fill='var(--primary-color)'"></i>`;
+});
 
-copyButton.addEventListener('click', copy(copyText));
 
 const downloadButton = document.querySelector('#download-button')
 
-function downloadFile(path, filename) {
-    const anchor = document.createElement('a');
-    anchor.href = path;
-    anchor.download = filename;
+const questions = document.querySelectorAll('.question');
+const answers = document.querySelectorAll('.answer');
+const pts = document.querySelectorAll('.answer-pts');
 
-    // Append to the DOM
-    document.body.appendChild(anchor);
+// Create an array to store the data
+const evaluationData = [];
 
-    // Trigger `click` event
-    // anchor.click();
+// Iterate through each question and answer pair
+for (let i = 0; i < questions.length; i++) {
+    // Extract the question and answer text
+    const firstLetterIdx = 0
+    const question = questions[i].textContent;
+    const answer = answers[i].textContent;
+    const pt = parseInt(pts[i].textContent[firstLetterIdx]);
 
-    // Remove element from DOM
-    document.body.removeChild(anchor);
+    // Add the question and answer to the evaluationData array
+    evaluationData.push({
+        'Question': question,
+        'Answer': answer,
+        'Points': pt
+    });
 }
 
-// downloadButton.addEventListener('click', downloadFile(evaluationReportPath, reportName))
+// Convert the evaluationData to a CSV-formatted string
+const csv = Papa.unparse(evaluationData);
 
-const sidebar = document.querySelector('.sidebar')
-let isSidebarOpen = true;
-const closeIcon = document.querySelector('#closeSidebar')
-const openIcon = document.querySelector('#openSidebar')
-const sidebarLinks = document.querySelectorAll('.sidebarLink')
-closeIcon.addEventListener('click',
-    () => {
-        sidebar.style.width = '0px';
-        openIcon.style.display = 'block';
-        closeIcon.style.display = 'none';
-        sidebarLinks.forEach(link => {
-            link.style.display = 'none'
-        });
-        isSidebarOpen = false;
-    }
-)
-openIcon.addEventListener('click',
-    () => {
-        sidebar.style.width = 'var(--sidebar-width)';
-        openIcon.style.display = 'none';
-        closeIcon.style.display = 'block';
-        sidebarLinks.forEach(link => {
-            link.style.display = 'block'
-        });
-        isSidebarOpen = true;
-    }
-)
+downloadButton.addEventListener('click', () => {
+    const element = document.createElement('a');
+    // download the csv file
+    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+    element.setAttribute('download', reportName + reportExtension);
 
-const barsIcon = document.querySelector('.bars-icon')
-const navList = document.querySelector('#navList')
-let isNavbarOpen = false
+    element.style.display = 'none';
+    document.body.appendChild(element);
 
-barsIcon.addEventListener('click', () => {
-    if (isNavbarOpen) {
-        navList.style.display = 'none'
-        isNavbarOpen = false;
-    }
-    else {
-        navList.style.display = 'flex'
-        isNavbarOpen = true;
-    }
+    element.click();
+
+    document.body.removeChild(element);
 })
+
+const details = document.querySelectorAll('.section-details');
+if (window.innerWidth < 768) {
+    details.forEach(detail => {
+        detail.removeAttribute('open');
+    })
+} else {
+    details.forEach(detail => {
+        detail.setAttribute('open', 'open');
+    })
+}
+
+const searchInput = document.querySelector('#searchInput')
+const messages = document.querySelectorAll('.message')
+
+searchInput.addEventListener('input',
+    function () {
+        messages.forEach((msg) => {
+            const parent = msg.parentElement
+            const grandparent = parent.parentElement
+            if (msg.innerText.toLowerCase().includes(this.value.toLowerCase())) {
+                grandparent.style.display = 'block'
+            } else {
+                grandparent.style.display = 'none'
+            }
+        })
+    }
+)
